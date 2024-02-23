@@ -12,8 +12,8 @@ public class CureTatooine {
 		Logger.load();
 		
 		
-		LogicalDateTime start = new LogicalDateTime("01/01/2024 00:00");
-		LogicalDateTime end = new LogicalDateTime("31/09/2024 00:00");
+		LogicalDateTime start = new LogicalDateTime("01/02/2024 00:00");
+		LogicalDateTime end = new LogicalDateTime("31/10/2024 00:00");
 
 		PlanTatooine plan = new PlanTatooine(1, start, end);
 

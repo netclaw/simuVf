@@ -1,6 +1,9 @@
 package enstabretagne.cureTatooine.client;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import annexeTatooine.Atelier;
 import enstabretagne.base.logger.Logger;
@@ -12,12 +15,17 @@ import enstabretagne.engine.SimuEngine;
 @ToRecord(name="Client")
 public class Client extends EntiteSimulee{
 	
-	List<Atelier> cure;
-	List<Integer> points;
+	List<String> cure;
+	Map<String,Integer> pointsParAtelier;
 
-	public Client(SimuEngine engine, InitData ini/*,List<String> cure*/) {
+	public Client(SimuEngine engine, InitData ini,List<String> zoneAFaire) {
 		super(engine, ini);
 		//this.cure=
+		this.cure=new ArrayList<String>();
+		for(String sc:zoneAFaire) {
+			this.cure.add(sc);
+		}
+		this.pointsParAtelier=new HashMap<>();
 		
 	}
 	
@@ -37,6 +45,24 @@ public class Client extends EntiteSimulee{
 		System.out.println("client initialisé");
 		//Logger.Information(this, "init", "Initialisation en cours");
 	}
+
+	public List<String> getCure() {
+		return cure;
+	}
+
+	public void setCure(List<String> cure) {
+		this.cure = cure;
+	}
+
+	public Map<String, Integer> getPointsParAtelier() {
+		return pointsParAtelier;
+	}
+
+	public void setPointsParAtelier(Map<String, Integer> pointsParAtelier) {
+		this.pointsParAtelier = pointsParAtelier;
+	}
+
+	
 	
 	
 }

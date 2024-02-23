@@ -7,6 +7,7 @@ import java.util.List;
 import annexeTatooine.Atelier;
 import enstabretagne.base.logger.Logger;
 import enstabretagne.base.logger.ToRecord;
+import enstabretagne.base.math.MoreRandom;
 import enstabretagne.base.time.LogicalDateTime;
 import enstabretagne.base.time.LogicalDuration;
 import enstabretagne.cureTatooine.client.Client;
@@ -25,9 +26,45 @@ public class ScenarioTatooineSimple extends Scenario {
 	int nbClientMaxMois;
 	int nbClientEnCours;
 	List<Atelier> zones;
+	
+	List<Integer> nbAtelier;//gérer les proportions
+	List<Double> proportion;//gérer les proportions
+	
+	public Atelier getAtelierByName(String nomAtelier) {
+		
+		for(Atelier a: this.zones) {
+			if(a.getNom().compareTo("nomAtelier")==0) {
+				return a;	
+			}
+		}
+		return null;
+	}
 
 	public ScenarioTatooineSimple(SimuEngine engine, ScenarioInitData init) {
 		super(engine, init);
+		
+		fixerProportion();
+		
+		creerZones();
+		
+	}
+	
+	
+	public void fixerProportion() {
+		
+		this.nbAtelier= new ArrayList<Integer>();
+		this.proportion= new ArrayList<Double>();
+		
+		this.nbAtelier.add(3);
+		this.nbAtelier.add(4);
+		this.nbAtelier.add(5);
+		this.nbAtelier.add(6);
+		
+		this.proportion.add(0.2);
+		this.proportion.add(0.35);
+		this.proportion.add(0.3);
+		this.proportion.add(0.15);
+		
 	}
 
 	@Override
@@ -35,7 +72,6 @@ public class ScenarioTatooineSimple extends Scenario {
 		
 		System.out.println("début ScenarioTatooineSimple:creerEntitesSimulees");
 		
-		creerZones();
 		
 		ScenarioTatooineInit scenario = (ScenarioTatooineInit) getInit();
 		nbClientMax = scenario.capaciteMaxClientInstitut;
@@ -43,8 +79,49 @@ public class ScenarioTatooineSimple extends Scenario {
 		//On prépare les changements d'affluence chaque mois
 		for(AffluenceParMois a : scenario.affluenceParMois) {
 			Post(new ChangementTauxCreationMois(a.d,a.tauxMax));
-			for(int i=0;i<(a.tauxMax*nbClientMax);i++)
-				Post(new CreerClient(a.d));
+			
+			
+			for(int x=0;x<this.nbAtelier.size(); x++) {
+				
+				double fraction=this.proportion.get(x);
+				//System.out.println("fraction ----- "+fraction);
+				int fractionCuriste=(int)(a.tauxMax*nbClientMax*fraction);//je prend la fraction
+				//System.out.println("nombre cherché ----------"+fractionCuriste); le calcul avec virgule peut faire perdre un cient peut etre meme deux
+				int nombreAtelierFraction=this.nbAtelier.get(x);
+				
+				
+				//je genère le nombre d'ateliers approprié
+				MoreRandom mr= new MoreRandom();
+				
+				for(int i=0;i<(fractionCuriste);i++) {
+					
+					ArrayList<String> zonesAfaire=new ArrayList();//à remplir et sera effecté au client
+					ArrayList<String> inteAzone=new ArrayList();
+					for(Atelier p:this.zones) {
+						inteAzone.add(p.getNom());
+						
+					}
+					
+					for(int k=0;k<nombreAtelierFraction;k++) {
+						int randomIndex = mr.nextInt(inteAzone.size());
+						zonesAfaire.add(inteAzone.get(randomIndex));
+						inteAzone.remove(randomIndex);
+						
+					}
+					//fin genèration d'ateliers approprié
+					
+					int r=mr.nextInt(9)+1;
+					
+					Post(new CreerClient(a.d.add(LogicalDuration.ofDay(r)),zonesAfaire));
+
+					
+					
+				}
+				
+				
+			}
+			
+			
 		}
 		
 		System.out.println("fin ScenarioTatooineSimple:creerEntitesSimulees");
@@ -71,9 +148,10 @@ public class ScenarioTatooineSimple extends Scenario {
 	
 	
 	//normalement ici il faut créer un process assez élaboré avec le parcours de soin
-	protected void creerClientAleatoire() {
+	protected void creerClientAleatoire(ArrayList<String> zonesAfaire) {
+		
 			ClientInitData iniClient = new ClientInitData("C"+nbClientEnCours++) ; 
-			Client c = new Client(getEngine(), iniClient);
+			Client c = new Client(getEngine(), iniClient,zonesAfaire);
 			c.requestInit();
 			
 			//On sait que la cure ne dure que 3 semaines donc départ du client dans 3 semaines
@@ -100,15 +178,21 @@ public class ScenarioTatooineSimple extends Scenario {
 
 	//
 	public class CreerClient extends SimEvent {
+		
+		ArrayList<String> zonesAfaire;
 
-		public CreerClient(LogicalDateTime d) {
+		public CreerClient(LogicalDateTime d,ArrayList<String> zonesAfaire) {
 			super(d);
+			this.zonesAfaire=new ArrayList<String>();
+			for(String s:zonesAfaire) {
+				this.zonesAfaire.add(s);
+			}
 		}
 		
 		@Override
 		public void process() {
 			
-			creerClientAleatoire();
+			creerClientAleatoire(this.zonesAfaire);
 		}
 		
 	}

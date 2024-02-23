@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import enstabretagne.base.time.LogicalDateTime;
-import enstabretagne.cureTatooine.scenarios.ScenarioTatooineDynamique;
 import enstabretagne.cureTatooine.scenarios.ScenarioTatooineInit;
 import enstabretagne.cureTatooine.scenarios.ScenarioTatooineInit.AffluenceParMois;
 import enstabretagne.cureTatooine.scenarios.ScenarioTatooineSimple;
