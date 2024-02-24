@@ -84,6 +84,7 @@ public class ScenarioTatooineSimple extends Scenario {
 			for(int x=0;x<this.nbAtelier.size(); x++) {
 				
 				double fraction=this.proportion.get(x);
+				//System.out.println("proportionFraction "+(x+1));
 				//System.out.println("fraction ----- "+fraction);
 				int fractionCuriste=(int)(a.tauxMax*nbClientMax*fraction);//je prend la fraction
 				//System.out.println("nombre cherché ----------"+fractionCuriste); le calcul avec virgule peut faire perdre un cient peut etre meme deux
@@ -110,8 +111,8 @@ public class ScenarioTatooineSimple extends Scenario {
 					}
 					//fin genèration d'ateliers approprié
 					
-					int r=mr.nextInt(9)+1;
-					
+					int r=mr.nextInt(8)+1;// un client peut arriver dans les 9 premier jours d'un mois
+					//System.out.println("Cure "+zonesAfaire);
 					Post(new CreerClient(a.d.add(LogicalDuration.ofDay(r)),zonesAfaire));
 
 					
@@ -153,6 +154,8 @@ public class ScenarioTatooineSimple extends Scenario {
 			ClientInitData iniClient = new ClientInitData("C"+nbClientEnCours++) ; 
 			Client c = new Client(getEngine(), iniClient,zonesAfaire);
 			c.requestInit();
+			
+			//Post(new StartCures(localdatetime,c));//cette ligne servira à démarer la réalisation des atelier
 			
 			//On sait que la cure ne dure que 3 semaines donc départ du client dans 3 semaines
 			Post(new DepartClient(Now().add(LogicalDuration.ofDay(21)),c));
@@ -207,6 +210,41 @@ public class ScenarioTatooineSimple extends Scenario {
 			setNbClientEnCours(nbClientEnCours-1);
 		}
 	}
+	
+	
+	public class StartCures extends SimEvent {//evenemnt qui démare la réalisation des ateliers
+		
+		public Client curiste;
+
+		public StartCures(LogicalDateTime d,Client curiste) {
+			super(d);
+			// TODO Auto-generated constructor stub
+			this.curiste=curiste;
+		}
+
+		@Override
+		public void process() {
+			// TODO Auto-generated method stub
+			
+			for(String natelier:this.curiste.getCure()) {
+				Atelier refat=getAtelierByName(natelier);
+				if(curiste.getPointsParAtelier().get("natelier")!=0) {//un atelier deja fait cad ses points>0 ne doit pas etre refais meme si ces points ne sont pas au max
+					continue;
+				}
+				boolean v=refat.nouveauClient(curiste);
+				if(v) {
+					break;
+				}
+				
+			}//faut jouter logique deplacement qlqe part: deplcamenet avant verification disponibilite
+			//afin deviter situation ou deux dans des ateliers differents verifie et apres les deux arrive en meme temps donc un seul entre
+			
+			
+			
+		}
+		
+	}
+	
 	
 	public class ChangementTauxCreationMois extends SimEvent {
 

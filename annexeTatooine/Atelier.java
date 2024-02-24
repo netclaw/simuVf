@@ -1,7 +1,10 @@
 package annexeTatooine;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Queue;
 
 import enstabretagne.base.time.LogicalDuration;
 import enstabretagne.cureTatooine.client.Client;
@@ -22,7 +25,8 @@ public class Atelier {
 	int tailleFile;
 	int NombreAtelierOccupe;
 	String typeFreq;
-	public ArrayList<Client> fileAttente;
+	public Queue<Client> fileAttente;
+	Map<String,Integer> distances;
 	
 	public Atelier(String nom,String typeSoin,String typeFreq,SimpleDateFormat ouverture,SimpleDateFormat fermeture,int NombreAtelier,LogicalDuration dureeAtelier,int efficacite,LogicalDuration freqDefaillance,double stdDefaillance,LogicalDuration tempsRemiseMarche,String typeAttente,int tailleFile ) {
 		this.nom = nom;
@@ -39,8 +43,34 @@ public class Atelier {
 	    this.typeAttente = typeAttente;
 	    this.tailleFile = tailleFile;
 	    this.NombreAtelierOccupe=NombreAtelier;
-	    this.fileAttente=new ArrayList<Client>(this.tailleFile);
+	    this.fileAttente = new LinkedList<Client>();
+	    this.distances=new HashMap<String,Integer>();
 	     
+	}
+	
+	public boolean nouveauClient(Client curiste) {
+		
+		if(this.NombreAtelier>this.NombreAtelierOccupe) {
+			this.NombreAtelierOccupe=this.NombreAtelierOccupe+1;
+			//client utilise atelier
+			//Post(new AtelierEntry());//doit genereer une sortie apres le temps de l'atelier//atelierEntry event doit augmenter les points
+			
+			return true;
+		}
+		else {
+			if(this.fileAttente.size()>=tailleFile) {//le cas supérieur ne doit pas etre possible, il est inclut juste pour ecrire else
+				//rejeter client car pas de place et file pleine//doit verifier s'il a d'autre atelier a faire
+				return false;
+				
+			}
+			else {
+				this.fileAttente.add(curiste);
+				//client rejoint la file d'attente//attend son tour
+				return true;
+			}
+			
+		}
+				
 	}
 
 	public String getNom() {
@@ -155,11 +185,11 @@ public class Atelier {
 		this.typeFreq = typeFreq;
 	}
 
-	public ArrayList<Client> getFileAttente() {
+	public Queue<Client> getFileAttente() {
 		return fileAttente;
 	}
 
-	public void setFileAttente(ArrayList<Client> fileAttente) {
+	public void setFileAttente(Queue<Client> fileAttente) {
 		this.fileAttente = fileAttente;
 	}
 	
