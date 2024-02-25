@@ -234,6 +234,7 @@ public class ScenarioTatooineSimple extends Scenario {
 		public void process() {
 			// TODO Auto-generated method stub
 			
+			System.out.println("Client "+this.curiste +" vérifie les ateleirs à faire");
 			if(this.checked<this.curiste.getCure().size()) {
 				
 				for(int l=this.checked;l<this.curiste.getCure().size();l++) {
@@ -277,6 +278,8 @@ public class ScenarioTatooineSimple extends Scenario {
 		@Override
 		public void process() {
 			// TODO Auto-generated method stub
+			
+			System.out.println("Client "+this.curiste +" se déplace vers la zone d'un atelier");
 			for(String natelier:this.curiste.getCure()) {
 				
 				//faut ajouter check if atelier ouvert
@@ -312,16 +315,41 @@ public class ScenarioTatooineSimple extends Scenario {
 		@Override
 		public void process() {
 			// TODO Auto-generated method stub
+			
+			System.out.println("Client "+this.curiste +" arrive à la zone d'un atelier");
+			
 			this.curiste.setPositionCourante(this.nomZone);
 			Atelier refat=getAtelierByName(this.nomZone);
 			boolean v=refat.nouveauClient(curiste);
 			
+			
 			if(!v) {//v=true => client a pu entrer en atelier ou en file attente
-				//Post(new )
+				Post(new StartCures(this.getDateOccurence(), this.curiste,this.curiste.getCure().indexOf(this.nomZone)));//recheck un autre atelier à faire
+			}
+			else {
+				//en file d'attente ou en atelier
 			}
 				
 			
 			}
+		
+	}
+	
+	
+	public class AtelierEntry extends SimEvent{
+		
+		public Client curiste;
+
+		public AtelierEntry(LogicalDateTime d,Client curiste) {
+			super(d);
+			// TODO Auto-generated constructor stub
+		}
+
+		@Override
+		public void process() {
+			// TODO Auto-generated method stub
+			
+		}
 		
 	}
 	
