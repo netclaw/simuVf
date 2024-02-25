@@ -109,7 +109,7 @@ public class ScenarioTatooineSimple extends Scenario {
 						inteAzone.remove(randomIndex);
 						
 					}
-					//fin genèration d'ateliers approprié
+					//fin genèration d'autant d'ateliers q'il faut
 					
 					int r=mr.nextInt(8)+1;// un client peut arriver dans les 9 premier jours d'un mois
 					//System.out.println("Cure "+zonesAfaire);
@@ -233,9 +233,9 @@ public class ScenarioTatooineSimple extends Scenario {
 				Atelier refat=getAtelierByName(natelier);
 				
 				if(this.curiste.getPositionCourante()!="detente") {
-					//faut jouter logique deplacement qlqe part: deplcamenet avant verification disponibilite
 					//afin deviter situation ou deux dans des ateliers differents verifie et apres les deux arrive en meme temps donc un seul entre
 					int distance=refat.getDistances().get(this.curiste.getPositionCourante());
+					Post(new ArriveZone(this.getDateOccurence().add(LogicalDuration.ofMinutes(distance))));
 					//ajouter logique d'attente relative au déplacement
 					
 				}
@@ -251,6 +251,57 @@ public class ScenarioTatooineSimple extends Scenario {
 				
 			}
 			
+			
+		}
+		
+	}
+	
+	public class VersZone extends SimEvent{
+		
+		public Client curiste;
+
+		public VersZone(LogicalDateTime d,Client curiste) {
+			super(d);
+			// TODO Auto-generated constructor stub
+		}
+
+		@Override
+		public void process() {
+			// TODO Auto-generated method stub
+			for(String natelier:this.curiste.getCure()) {
+				
+				//faut ajouter check if atelier ouvert
+				Atelier refat=getAtelierByName(natelier);
+				if(this.curiste.getPositionCourante()!="detente") {
+					//afin deviter situation ou deux dans des ateliers differents verifie et apres les deux arrive en meme temps donc un seul entre
+					int distance=refat.getDistances().get(this.curiste.getPositionCourante());
+					Post(new ArriveZone(this.getDateOccurence().add(LogicalDuration.ofMinutes(distance)),this.curiste));
+					//ajouter logique d'attente relative au déplacement
+					
+				}else {
+					Post(new ArriveZone(this.getDateOccurence(),this.curiste));
+				}
+				
+			}
+			
+		}
+		
+	}
+	
+	
+	public class ArriveZone extends SimEvent{
+		
+		public Client curiste;
+
+		public ArriveZone(LogicalDateTime d,Client curiste) {
+			super(d);
+			// TODO Auto-generated constructor stub
+			this.curiste=curiste;
+		}
+
+		@Override
+		public void process() {
+			// TODO Auto-generated method stub
 			
 		}
 		
