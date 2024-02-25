@@ -13,7 +13,7 @@ import enstabretagne.engine.EntiteSimulee;
 import enstabretagne.engine.InitData;
 import enstabretagne.engine.SimuEngine;
 
-public class Atelier extends EntiteSimulee{//Zone avec plusieurs ateliers identique=atelier avec capacité/entitee simulee car gere la file d'attente
+public class Atelier {//Zone avec plusieurs ateliers identique=atelier avec capacité/entitee simulee car gere la file d'attente
 	
 	String nom;
 	String typeSoin;
@@ -32,8 +32,7 @@ public class Atelier extends EntiteSimulee{//Zone avec plusieurs ateliers identi
 	public Queue<Client> fileAttente;
 	Map<String,Integer> distances;
 	
-	public Atelier(String nom,String typeSoin,String typeFreq,SimpleDateFormat ouverture,SimpleDateFormat fermeture,int NombreAtelier,LogicalDuration dureeAtelier,int efficacite,LogicalDuration freqDefaillance,double stdDefaillance,LogicalDuration tempsRemiseMarche,String typeAttente,int tailleFile,SimuEngine engine, InitData ini ) {
-		super(engine, ini);
+	public Atelier(String nom,String typeSoin,String typeFreq,SimpleDateFormat ouverture,SimpleDateFormat fermeture,int NombreAtelier,LogicalDuration dureeAtelier,int efficacite,LogicalDuration freqDefaillance,double stdDefaillance,LogicalDuration tempsRemiseMarche,String typeAttente,int tailleFile ) {
 		this.nom = nom;
 	    this.typeSoin = typeSoin;
 	    this.typeFreq=typeFreq;
