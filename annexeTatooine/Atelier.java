@@ -87,6 +87,7 @@ public class Atelier extends EntiteSimulee{//Zone avec plusieurs ateliers identi
 		
 		if(this.fileAttente.size()!=0) {
 			Client curiste=this.getFileAttente().poll();
+			this.NombreAtelierOccupe=this.NombreAtelierOccupe-1;
 			return curiste;
 			
 		}
