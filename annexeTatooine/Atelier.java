@@ -47,7 +47,6 @@ public class Atelier extends EntiteSimulee{//Zone avec plusieurs ateliers identi
 	    this.tempsRemiseMarche = tempsRemiseMarche;
 	    this.typeAttente = typeAttente;
 	    this.tailleFile = tailleFile;
-	    this.NombreAtelierOccupe=NombreAtelier;
 	    this.fileAttente = new LinkedList<Client>();
 	    this.distances=new HashMap<String,Integer>();
 	    this.NombreAtelierOccupe=0;
@@ -59,10 +58,12 @@ public class Atelier extends EntiteSimulee{//Zone avec plusieurs ateliers identi
 	
 	public String nouveauClient(Client curiste) {
 		
+		System.out.println(this.NombreAtelier);
+		System.out.println(this.NombreAtelierOccupe);
+		
 		if(this.NombreAtelier>this.NombreAtelierOccupe) {
 			this.NombreAtelierOccupe=this.NombreAtelierOccupe+1;
 			//client utilise atelier//scenario
-			
 			return "enAtelier";
 		}
 		else {
@@ -78,6 +79,7 @@ public class Atelier extends EntiteSimulee{//Zone avec plusieurs ateliers identi
 			}
 			
 		}
+		
 				
 	}
 	

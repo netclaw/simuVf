@@ -346,7 +346,7 @@ public class ScenarioTatooineSimple extends Scenario {
 			//System.out.println(getAtelierByName(Zone Bains à jets"));
 			String v=refat.nouveauClient(curiste);
 			
-			
+			System.out.println(v);
 			switch(v) {
 			case "enAtelier":
 				System.out.println("Client "+this.curiste +" en train de faire un atelier");
@@ -355,8 +355,8 @@ public class ScenarioTatooineSimple extends Scenario {
 			case "enFile":
 				System.out.println("Client "+this.curiste +" attend en file d'attente");
 				break;
-			case "plein":
-				Post(new StartCures(this.getDateOccurence(), this.curiste,this.curiste.getCure().indexOf(this.nomZone)));//recheck un autre atelier à faire
+			case "plein"://reverifie les autres aterliers apres un delai
+				Post(new StartCures(this.getDateOccurence().add(LogicalDuration.ofMinutes(5)), this.curiste,this.curiste.getCure().indexOf(this.nomZone)));//recheck un autre atelier à faire
 				break;
 			
 			}		
@@ -374,6 +374,8 @@ public class ScenarioTatooineSimple extends Scenario {
 		public AtelierTime(LogicalDateTime d,Client curiste, String nomZone) {
 			super(d);
 			// TODO Auto-generated constructor stub
+			this.curiste=curiste;
+			this.nomZone=nomZone;
 		}
 
 		@Override
