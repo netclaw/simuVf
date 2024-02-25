@@ -14,6 +14,7 @@ import enstabretagne.base.time.LogicalDuration;
 import enstabretagne.cureTatooine.client.Client;
 import enstabretagne.cureTatooine.client.ClientInitData;
 import enstabretagne.cureTatooine.scenarios.ScenarioTatooineInit.AffluenceParMois;
+import enstabretagne.cureTatooine.scenarios.ScenarioTatooineSimple.AtelierTime;
 import enstabretagne.engine.EntiteSimulee;
 import enstabretagne.engine.Scenario;
 import enstabretagne.engine.ScenarioInitData;
@@ -358,6 +359,13 @@ public class ScenarioTatooineSimple extends Scenario {
 			
 			System.out.println("Client "+this.curiste +" a terminé un atelier");
 			this.curiste.getPointsParAtelier().put(this.nomZone, 1);//faut ajouter logique de point sproportionnel à la durée
+			Atelier refat=getAtelierByName(this.nomZone);
+			refat.setNombreAtelierOccupe(refat.getNombreAtelierOccupe()-1);
+			Client newcuriste=refat.manageFile();//dépiler la file de l'atelier
+			if(newcuriste!=null) {
+				Post(new AtelierTime(this.getDateOccurence().add(refat.getDureeAtelier()), curiste,this.nomZone));
+
+			}
 			Post(new StartCures(this.getDateOccurence(), this.curiste,this.curiste.getCure().indexOf(this.nomZone)));//recheck un autre atelier à faire
 			
 			

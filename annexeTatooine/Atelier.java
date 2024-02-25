@@ -8,11 +8,12 @@ import java.util.Queue;
 
 import enstabretagne.base.time.LogicalDuration;
 import enstabretagne.cureTatooine.client.Client;
+import enstabretagne.cureTatooine.scenarios.ScenarioTatooineSimple.AtelierTime;
 import enstabretagne.engine.EntiteSimulee;
 import enstabretagne.engine.InitData;
 import enstabretagne.engine.SimuEngine;
 
-public class Atelier extends EntiteSimulee{
+public class Atelier extends EntiteSimulee{//Zone avec plusieurs ateliers identique=atelier avec capacité/entitee simulee car gere la file d'attente
 	
 	String nom;
 	String typeSoin;
@@ -59,14 +60,13 @@ public class Atelier extends EntiteSimulee{
 		
 		if(this.NombreAtelier>this.NombreAtelierOccupe) {
 			this.NombreAtelierOccupe=this.NombreAtelierOccupe+1;
-			//client utilise atelier
-			//Post(new AtelierEntry());//doit genereer une sortie apres le temps de l'atelier//atelierEntry event doit augmenter les points
+			//client utilise atelier//scenario
 			
 			return "enAtelier";
 		}
 		else {
 			if(this.fileAttente.size()>=tailleFile) {//le cas supérieur ne doit pas etre possible, il est inclut juste pour ecrire else
-				//rejeter client car pas de place et file pleine//doit verifier s'il a d'autre atelier a faire
+				//rejeter client car pas de place et file pleine//doit verifier s'il a d'autre atelier a faire//scenario
 				return "plein";
 				
 			}
@@ -78,6 +78,19 @@ public class Atelier extends EntiteSimulee{
 			
 		}
 				
+	}
+	
+	public Client manageFile() {
+		
+		if(this.fileAttente.size()!=0) {
+			Client curiste=this.getFileAttente().poll();
+			return curiste;
+			
+		}
+		
+		//client rejoint la file d'attente//attend son tour
+		//Post()
+		return null;
 	}
 	
 	public String finClient(Client curiste) {
