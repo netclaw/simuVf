@@ -18,7 +18,7 @@ import enstabretagne.engine.Scenario;
 import enstabretagne.engine.ScenarioInitData;
 import enstabretagne.engine.SimEvent;
 import enstabretagne.engine.SimuEngine;
-
+import java.util.Date;
 @ToRecord(name = "Scenario")
 public class ScenarioTatooineSimple extends Scenario {
 	
@@ -227,12 +227,16 @@ public class ScenarioTatooineSimple extends Scenario {
 			// TODO Auto-generated method stub
 			
 			for(String natelier:this.curiste.getCure()) {
+				
+				//check if atelier ouvert
+				
 				Atelier refat=getAtelierByName(natelier);
 				if(curiste.getPointsParAtelier().get("natelier")!=0) {//un atelier deja fait cad ses points>0 ne doit pas etre refais meme si ces points ne sont pas au max
 					continue;
 				}
+				
 				boolean v=refat.nouveauClient(curiste);
-				if(v) {
+				if(v) {//v=true => client a pu entrr en atelier ou en file attente
 					break;
 				}
 				
