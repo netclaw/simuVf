@@ -245,7 +245,7 @@ public class ScenarioTatooineSimple extends Scenario {
 				}
 				
 				boolean v=refat.nouveauClient(curiste);
-				if(v) {//v=true => client a pu entrr en atelier ou en file attente
+				if(v) {//v=true => client a pu entrer en atelier ou en file attente
 					break;
 				}
 				
