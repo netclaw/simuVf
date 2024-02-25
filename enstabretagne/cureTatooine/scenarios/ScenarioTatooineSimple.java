@@ -228,26 +228,12 @@ public class ScenarioTatooineSimple extends Scenario {
 			
 			for(String natelier:this.curiste.getCure()) {
 				
-				//faut ajouter check if atelier ouvert
-				
-				Atelier refat=getAtelierByName(natelier);
-				
-				if(this.curiste.getPositionCourante()!="detente") {
-					//afin deviter situation ou deux dans des ateliers differents verifie et apres les deux arrive en meme temps donc un seul entre
-					int distance=refat.getDistances().get(this.curiste.getPositionCourante());
-					Post(new ArriveZone(this.getDateOccurence().add(LogicalDuration.ofMinutes(distance))));
-					//ajouter logique d'attente relative au déplacement
-					
-				}
-
 				if(curiste.getPointsParAtelier().get("natelier")!=0) {//un atelier deja fait cad ses points>0 ne doit pas etre refais meme si ces points ne sont pas au max
 					continue;
 				}
 				
-				boolean v=refat.nouveauClient(curiste);
-				if(v) {//v=true => client a pu entrer en atelier ou en file attente
-					break;
-				}
+				Post(new VersZone(this.getDateOccurence(),this.curiste));
+				
 				
 			}
 			
@@ -275,11 +261,11 @@ public class ScenarioTatooineSimple extends Scenario {
 				if(this.curiste.getPositionCourante()!="detente") {
 					//afin deviter situation ou deux dans des ateliers differents verifie et apres les deux arrive en meme temps donc un seul entre
 					int distance=refat.getDistances().get(this.curiste.getPositionCourante());
-					Post(new ArriveZone(this.getDateOccurence().add(LogicalDuration.ofMinutes(distance)),this.curiste));
+					Post(new ArriveZone(this.getDateOccurence().add(LogicalDuration.ofMinutes(distance)),this.curiste,natelier));
 					//ajouter logique d'attente relative au déplacement
 					
 				}else {
-					Post(new ArriveZone(this.getDateOccurence(),this.curiste));
+					Post(new ArriveZone(this.getDateOccurence(),this.curiste,natelier));
 				}
 				
 			}
@@ -292,8 +278,9 @@ public class ScenarioTatooineSimple extends Scenario {
 	public class ArriveZone extends SimEvent{
 		
 		public Client curiste;
+		public String nomZone;
 
-		public ArriveZone(LogicalDateTime d,Client curiste) {
+		public ArriveZone(LogicalDateTime d,Client curiste,String nomZone) {
 			super(d);
 			// TODO Auto-generated constructor stub
 			this.curiste=curiste;
@@ -302,6 +289,13 @@ public class ScenarioTatooineSimple extends Scenario {
 		@Override
 		public void process() {
 			// TODO Auto-generated method stub
+			this.curiste.setPositionCourante(this.nomZone);
+			Atelier refat=getAtelierByName(this.nomZone);
+			boolean v=refat.nouveauClient(curiste);
+			/*
+			if(v) {//v=true => client a pu entrer en atelier ou en file attente
+				break;
+			}*/
 			
 		}
 		
