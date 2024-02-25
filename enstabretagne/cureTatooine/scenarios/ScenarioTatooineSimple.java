@@ -215,27 +215,50 @@ public class ScenarioTatooineSimple extends Scenario {
 	public class StartCures extends SimEvent {//evenemnt qui démare la réalisation des ateliers
 		
 		public Client curiste;
+		public int checked=0;
 
 		public StartCures(LogicalDateTime d,Client curiste) {
 			super(d);
 			// TODO Auto-generated constructor stub
 			this.curiste=curiste;
 		}
+		
+		public StartCures(LogicalDateTime d,Client curiste,int checked) {
+			super(d);
+			// TODO Auto-generated constructor stub
+			this.curiste=curiste;
+			this.checked=checked;
+		}
 
 		@Override
 		public void process() {
 			// TODO Auto-generated method stub
 			
-			for(String natelier:this.curiste.getCure()) {
+			if(this.checked<this.curiste.getCure().size()) {
 				
-				if(curiste.getPointsParAtelier().get("natelier")!=0) {//un atelier deja fait cad ses points>0 ne doit pas etre refais meme si ces points ne sont pas au max
-					continue;
+				for(int l=this.checked;l<this.curiste.getCure().size();l++) {
+					
+					if(curiste.getPointsParAtelier().get(this.curiste.getCure().get(l))!=0) {//un atelier deja fait cad ses points>0 ne doit pas etre refais meme si ces points ne sont pas au max
+						continue;
+					}
+					
+					Post(new VersZone(this.getDateOccurence(),this.curiste));
+					
 				}
 				
-				Post(new VersZone(this.getDateOccurence(),this.curiste));
+			}else {
 				
+				for(String natelier:this.curiste.getCure()) {
+					
+					if(curiste.getPointsParAtelier().get("natelier")!=0) {//un atelier deja fait cad ses points>0 ne doit pas etre refais meme si ces points ne sont pas au max
+						continue;
+					}
+					Post(new VersZone(this.getDateOccurence(),this.curiste));
+						
+				}
 				
 			}
+			
 			
 			
 		}
@@ -292,12 +315,13 @@ public class ScenarioTatooineSimple extends Scenario {
 			this.curiste.setPositionCourante(this.nomZone);
 			Atelier refat=getAtelierByName(this.nomZone);
 			boolean v=refat.nouveauClient(curiste);
-			/*
-			if(v) {//v=true => client a pu entrer en atelier ou en file attente
-				break;
-			}*/
 			
-		}
+			if(!v) {//v=true => client a pu entrer en atelier ou en file attente
+				//Post(new )
+			}
+				
+			
+			}
 		
 	}
 	
