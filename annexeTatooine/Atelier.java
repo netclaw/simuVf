@@ -8,8 +8,11 @@ import java.util.Queue;
 
 import enstabretagne.base.time.LogicalDuration;
 import enstabretagne.cureTatooine.client.Client;
+import enstabretagne.engine.EntiteSimulee;
+import enstabretagne.engine.InitData;
+import enstabretagne.engine.SimuEngine;
 
-public class Atelier {
+public class Atelier extends EntiteSimulee{
 	
 	String nom;
 	String typeSoin;
@@ -28,7 +31,8 @@ public class Atelier {
 	public Queue<Client> fileAttente;
 	Map<String,Integer> distances;
 	
-	public Atelier(String nom,String typeSoin,String typeFreq,SimpleDateFormat ouverture,SimpleDateFormat fermeture,int NombreAtelier,LogicalDuration dureeAtelier,int efficacite,LogicalDuration freqDefaillance,double stdDefaillance,LogicalDuration tempsRemiseMarche,String typeAttente,int tailleFile ) {
+	public Atelier(String nom,String typeSoin,String typeFreq,SimpleDateFormat ouverture,SimpleDateFormat fermeture,int NombreAtelier,LogicalDuration dureeAtelier,int efficacite,LogicalDuration freqDefaillance,double stdDefaillance,LogicalDuration tempsRemiseMarche,String typeAttente,int tailleFile,SimuEngine engine, InitData ini ) {
+		super(engine, ini);
 		this.nom = nom;
 	    this.typeSoin = typeSoin;
 	    this.typeFreq=typeFreq;
@@ -51,29 +55,35 @@ public class Atelier {
 	     
 	}
 	
-	public boolean nouveauClient(Client curiste) {
+	public String nouveauClient(Client curiste) {
 		
 		if(this.NombreAtelier>this.NombreAtelierOccupe) {
 			this.NombreAtelierOccupe=this.NombreAtelierOccupe+1;
 			//client utilise atelier
 			//Post(new AtelierEntry());//doit genereer une sortie apres le temps de l'atelier//atelierEntry event doit augmenter les points
 			
-			return true;
+			return "enAtelier";
 		}
 		else {
 			if(this.fileAttente.size()>=tailleFile) {//le cas supérieur ne doit pas etre possible, il est inclut juste pour ecrire else
 				//rejeter client car pas de place et file pleine//doit verifier s'il a d'autre atelier a faire
-				return false;
+				return "plein";
 				
 			}
 			else {
 				this.fileAttente.add(curiste);
 				//client rejoint la file d'attente//attend son tour
-				return true;
+				return "enFile";
 			}
 			
 		}
 				
+	}
+	
+	public String finClient(Client curiste) {
+		
+		return null;
+		
 	}
 
 	public String getNom() {
