@@ -50,6 +50,7 @@ public class Atelier extends EntiteSimulee{//Zone avec plusieurs ateliers identi
 	    this.NombreAtelierOccupe=NombreAtelier;
 	    this.fileAttente = new LinkedList<Client>();
 	    this.distances=new HashMap<String,Integer>();
+	    this.NombreAtelierOccupe=0;
 	    
 	    this.fixDistances(this.nom);
 	    
@@ -228,6 +229,7 @@ public class Atelier extends EntiteSimulee{//Zone avec plusieurs ateliers identi
 	    	this.distances.put("Zone des soins du visage", 4);
 	    	this.distances.put("Zone des étuves", 1);
 	    	this.distances.put("Zone des terres chaudes", 3);
+	    	this.distances.put("Zone des jets filiformes", 0);
 	    	break;
 	    case "Zone des douches":
 	    	this.distances.put("Zone des jets filiformes", 1);
@@ -235,6 +237,8 @@ public class Atelier extends EntiteSimulee{//Zone avec plusieurs ateliers identi
 	    	this.distances.put("Zone des soins du visage", 2);
 	    	this.distances.put("Zone des étuves", 2);
 	    	this.distances.put("Zone des terres chaudes", 4);
+	    	this.distances.put("Zone des douches", 0);
+	    	
 	    	break;
 	    case "Zone Bains à jets":
 	    	this.distances.put("Zone des jets filiformes", 2);
@@ -242,6 +246,7 @@ public class Atelier extends EntiteSimulee{//Zone avec plusieurs ateliers identi
 	    	this.distances.put("Zone des soins du visage", 1);
 	    	this.distances.put("Zone des étuves", 3);
 	    	this.distances.put("Zone des terres chaudes", 3);
+	    	this.distances.put("Zone Bains à jets", 0);
 	    	break;
 	    case "Zone des soins du visage":
 	    	this.distances.put("Zone des jets filiformes", 4);
@@ -249,6 +254,7 @@ public class Atelier extends EntiteSimulee{//Zone avec plusieurs ateliers identi
 	    	this.distances.put("Zone Bains à jets", 1);
 	    	this.distances.put("Zone des étuves", 4);
 	    	this.distances.put("Zone des terres chaudes", 2);
+	    	this.distances.put("Zone des soins du visage", 0);
 	    	break;
 	    case "Zone des étuves":
 	    	this.distances.put("Zone des jets filiformes", 1);
@@ -256,6 +262,7 @@ public class Atelier extends EntiteSimulee{//Zone avec plusieurs ateliers identi
 	    	this.distances.put("Zone Bains à jets", 3);
 	    	this.distances.put("Zone des soins du visage", 4);
 	    	this.distances.put("Zone des terres chaudes", 2);
+	    	this.distances.put("Zone des étuves", 0);
 	    	break;
 	    case "Zone des terres chaudes":
 	    	this.distances.put("Zone des jets filiformes", 3);
@@ -263,6 +270,7 @@ public class Atelier extends EntiteSimulee{//Zone avec plusieurs ateliers identi
 	    	this.distances.put("Zone Bains à jets", 3);
 	    	this.distances.put("Zone des soins du visage", 2);
 	    	this.distances.put("Zone des étuves", 2);
+	    	this.distances.put("Zone des terres chaudes", 0);
 	    	break;
 
 	    }

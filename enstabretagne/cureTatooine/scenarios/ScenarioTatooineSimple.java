@@ -35,7 +35,7 @@ public class ScenarioTatooineSimple extends Scenario {
 	public Atelier getAtelierByName(String nomAtelier) {
 		
 		for(Atelier a: this.zones) {
-			if(a.getNom().compareTo("nomAtelier")==0) {
+			if(a.getNom().compareTo(nomAtelier)==0) {
 				return a;	
 			}
 		}
@@ -157,7 +157,7 @@ public class ScenarioTatooineSimple extends Scenario {
 			Client c = new Client(getEngine(), iniClient,zonesAfaire);
 			c.requestInit();
 			
-			//Post(new StartCures(localdatetime,c));//cette ligne servira à démarer la réalisation des atelier
+			Post(new StartCures(Now(),c));//cette ligne servira à démarer la réalisation des atelier//chaine avec des erreurs
 			
 			//On sait que la cure ne dure que 3 semaines donc départ du client dans 3 semaines
 			Post(new DepartClient(Now().add(LogicalDuration.ofDay(21)),c));
@@ -236,31 +236,49 @@ public class ScenarioTatooineSimple extends Scenario {
 		public void process() {
 			// TODO Auto-generated method stub
 			
-			System.out.println("Client "+this.curiste +" vérifie les ateleirs à faire");
-			if(this.checked<this.curiste.getCure().size()) {
-				
-				for(int l=this.checked;l<this.curiste.getCure().size();l++) {
-					
-					if(curiste.getPointsParAtelier().get(this.curiste.getCure().get(l))!=0) {//un atelier deja fait cad ses points>0 ne doit pas etre refais meme si ces points ne sont pas au max
-						continue;
-					}
-					
-					Post(new VersZone(this.getDateOccurence(),this.curiste));
-					
-				}
-				
-			}else {
-				
-				for(String natelier:this.curiste.getCure()) {
-					
-					if(curiste.getPointsParAtelier().get("natelier")!=0) {//un atelier deja fait cad ses points>0 ne doit pas etre refais meme si ces points ne sont pas au max
-						continue;
-					}
-					Post(new VersZone(this.getDateOccurence(),this.curiste));
-						
+			boolean allDone=true;
+			for(String cur:this.curiste.getCure()) {
+				if(this.curiste.getPointsParAtelier().get(cur)==0) {
+					allDone=false;
 				}
 				
 			}
+			
+			if(allDone) {
+				
+				System.out.println("Client "+this.curiste +" a terminé tous les ateleirs");
+				
+			}
+			else {
+				
+				System.out.println("Client "+this.curiste +" vérifie les ateleirs à faire");
+				if(this.checked<this.curiste.getCure().size()) {
+					
+					for(int l=this.checked;l<this.curiste.getCure().size();l++) {
+						
+						if(curiste.getPointsParAtelier().get(this.curiste.getCure().get(l))!=0) {//un atelier deja fait cad ses points>0 ne doit pas etre refais meme si ces points ne sont pas au max
+							continue;
+						}
+						
+						Post(new VersZone(this.getDateOccurence(),this.curiste));
+						
+					}
+					
+				}else {
+					
+					for(String natelier:this.curiste.getCure()) {
+						
+						if(curiste.getPointsParAtelier().get("natelier")!=0) {//un atelier deja fait cad ses points>0 ne doit pas etre refais meme si ces points ne sont pas au max
+							continue;
+						}
+						Post(new VersZone(this.getDateOccurence(),this.curiste));
+							
+					}
+					
+				}
+				
+			}
+			
 			
 			
 			
@@ -275,6 +293,7 @@ public class ScenarioTatooineSimple extends Scenario {
 		public VersZone(LogicalDateTime d,Client curiste) {
 			super(d);
 			// TODO Auto-generated constructor stub
+			this.curiste=curiste;
 		}
 
 		@Override
@@ -312,6 +331,7 @@ public class ScenarioTatooineSimple extends Scenario {
 			super(d);
 			// TODO Auto-generated constructor stub
 			this.curiste=curiste;
+			this.nomZone=nomZone;
 		}
 
 		@Override
@@ -321,7 +341,9 @@ public class ScenarioTatooineSimple extends Scenario {
 			System.out.println("Client "+this.curiste +" arrive à la zone d'un atelier");
 			
 			this.curiste.setPositionCourante(this.nomZone);
+			//System.out.println(this.nomZone);
 			Atelier refat=getAtelierByName(this.nomZone);
+			//System.out.println(getAtelierByName(Zone Bains à jets"));
 			String v=refat.nouveauClient(curiste);
 			
 			
@@ -331,6 +353,7 @@ public class ScenarioTatooineSimple extends Scenario {
 				Post(new AtelierTime(this.getDateOccurence().add(refat.getDureeAtelier()), curiste,this.nomZone));
 				break;
 			case "enFile":
+				System.out.println("Client "+this.curiste +" attend en file d'attente");
 				break;
 			case "plein":
 				Post(new StartCures(this.getDateOccurence(), this.curiste,this.curiste.getCure().indexOf(this.nomZone)));//recheck un autre atelier à faire

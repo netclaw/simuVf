@@ -27,6 +27,9 @@ public class Client extends EntiteSimulee{
 			this.cure.add(sc);
 		}
 		this.pointsParAtelier=new HashMap<>();
+		for(String sc:zoneAFaire) {
+			this.pointsParAtelier.put(sc, 0);
+		}
 		
 	}
 	
