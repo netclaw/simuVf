@@ -245,7 +245,10 @@ public class Atelier {
 	    }
 		this.distances.put("detente", 0);
 	}
-	
+
+	public Map<String, Integer> getDistances() {
+		return distances;
+	}
 	
 
 }

@@ -228,15 +228,18 @@ public class ScenarioTatooineSimple extends Scenario {
 			
 			for(String natelier:this.curiste.getCure()) {
 				
-				if(this.curiste.getPositionCourante()!="detente") {
-					//faut jouter logique deplacement qlqe part: deplcamenet avant verification disponibilite
-					//afin deviter situation ou deux dans des ateliers differents verifie et apres les deux arrive en meme temps donc un seul entre
-					
-				}
-				
 				//faut ajouter check if atelier ouvert
 				
 				Atelier refat=getAtelierByName(natelier);
+				
+				if(this.curiste.getPositionCourante()!="detente") {
+					//faut jouter logique deplacement qlqe part: deplcamenet avant verification disponibilite
+					//afin deviter situation ou deux dans des ateliers differents verifie et apres les deux arrive en meme temps donc un seul entre
+					int distance=refat.getDistances().get(this.curiste.getPositionCourante());
+					//ajouter logique d'attente relative au déplacement
+					
+				}
+
 				if(curiste.getPointsParAtelier().get("natelier")!=0) {//un atelier deja fait cad ses points>0 ne doit pas etre refais meme si ces points ne sont pas au max
 					continue;
 				}
