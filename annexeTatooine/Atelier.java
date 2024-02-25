@@ -45,6 +45,9 @@ public class Atelier {
 	    this.NombreAtelierOccupe=NombreAtelier;
 	    this.fileAttente = new LinkedList<Client>();
 	    this.distances=new HashMap<String,Integer>();
+	    
+	    this.fixDistances(this.nom);
+	    
 	     
 	}
 	
@@ -191,6 +194,55 @@ public class Atelier {
 
 	public void setFileAttente(Queue<Client> fileAttente) {
 		this.fileAttente = fileAttente;
+	}
+	
+	public void fixDistances(String nomZone) {
+		
+		switch(nomZone) {
+	    case "Zone des jets filiformes":
+	    	this.distances.put("Zone des douches", 1);
+	    	this.distances.put("Zone Bains à jets", 2);
+	    	this.distances.put("Zone des soins du visage", 4);
+	    	this.distances.put("Zone des étuves", 1);
+	    	this.distances.put("Zone des terres chaudes", 3);
+	    	break;
+	    case "Zone des douches":
+	    	this.distances.put("Zone des jets filiformes", 1);
+	    	this.distances.put("Zone Bains à jets", 1);
+	    	this.distances.put("Zone des soins du visage", 2);
+	    	this.distances.put("Zone des étuves", 2);
+	    	this.distances.put("Zone des terres chaudes", 4);
+	    	break;
+	    case "Zone Bains à jets":
+	    	this.distances.put("Zone des jets filiformes", 2);
+	    	this.distances.put("Zone des douches", 1);
+	    	this.distances.put("Zone des soins du visage", 1);
+	    	this.distances.put("Zone des étuves", 3);
+	    	this.distances.put("Zone des terres chaudes", 3);
+	    	break;
+	    case "Zone des soins du visage":
+	    	this.distances.put("Zone des jets filiformes", 4);
+	    	this.distances.put("Zone des douches", 2);
+	    	this.distances.put("Zone Bains à jets", 1);
+	    	this.distances.put("Zone des étuves", 4);
+	    	this.distances.put("Zone des terres chaudes", 2);
+	    	break;
+	    case "Zone des étuves":
+	    	this.distances.put("Zone des jets filiformes", 1);
+	    	this.distances.put("Zone des douches", 2);
+	    	this.distances.put("Zone Bains à jets", 3);
+	    	this.distances.put("Zone des soins du visage", 4);
+	    	this.distances.put("Zone des terres chaudes", 2);
+	    	break;
+	    case "Zone des terres chaudes":
+	    	this.distances.put("Zone des jets filiformes", 3);
+	    	this.distances.put("Zone des douches", 4);
+	    	this.distances.put("Zone Bains à jets", 3);
+	    	this.distances.put("Zone des soins du visage", 2);
+	    	this.distances.put("Zone des étuves", 2);
+	    	break;
+
+	    }
 	}
 	
 	
