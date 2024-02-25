@@ -16,6 +16,7 @@ import enstabretagne.engine.SimuEngine;
 public class Client extends EntiteSimulee{
 	
 	List<String> cure;
+	String positionCourante="detente";
 	Map<String,Integer> pointsParAtelier;
 
 	public Client(SimuEngine engine, InitData ini,List<String> zoneAFaire) {
@@ -60,6 +61,14 @@ public class Client extends EntiteSimulee{
 
 	public void setPointsParAtelier(Map<String, Integer> pointsParAtelier) {
 		this.pointsParAtelier = pointsParAtelier;
+	}
+
+	public String getPositionCourante() {
+		return positionCourante;
+	}
+
+	public void setPositionCourante(String positionCourante) {
+		this.positionCourante = positionCourante;
 	}
 
 	

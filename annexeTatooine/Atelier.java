@@ -243,6 +243,7 @@ public class Atelier {
 	    	break;
 
 	    }
+		this.distances.put("detente", 0);
 	}
 	
 	
