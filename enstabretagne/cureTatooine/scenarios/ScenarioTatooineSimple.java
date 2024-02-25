@@ -247,8 +247,8 @@ public class ScenarioTatooineSimple extends Scenario {
 			if(allDone) {
 				
 				System.out.println("Client "+this.curiste +" a terminé tous les ateleirs");
-				//depart detruire client
-				//this.curiste.terminate();
+				//attendre prochain jour
+				//renitialiser points et attendre le lendemain
 				
 			}
 			else {
